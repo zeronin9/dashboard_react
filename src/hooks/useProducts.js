@@ -1,30 +1,71 @@
-import { useState } from 'react';
-import { initialProducts } from '../data/mockProducts';
+import { useState, useEffect } from 'react';
+import { productService } from '../services/api';
 
 export const useProducts = () => {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const addProduct = (product) => {
-    const newProduct = {
-      ...product,
-      id: Math.max(...products.map(p => p.id), 0) + 1,
-      price: Number(product.price),
-      stock: Number(product.stock),
-    };
-    setProducts([...products, newProduct]);
-    return newProduct;
+  // Fetch products saat component mount
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await productService.getAll();
+      setProducts(data);
+    } catch (err) {
+      setError('Gagal memuat data produk');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const updateProduct = (id, updatedProduct) => {
-    setProducts(products.map(product => 
-      product.id === id 
-        ? { ...updatedProduct, id, price: Number(updatedProduct.price), stock: Number(updatedProduct.stock) }
-        : product
-    ));
+  const addProduct = async (productData) => {
+    try {
+      setLoading(true);
+      const newProduct = await productService.create(productData);
+      setProducts([...products, newProduct]);
+      return newProduct;
+    } catch (err) {
+      setError('Gagal menambah produk');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const deleteProduct = (id) => {
-    setProducts(products.filter(product => product.id !== id));
+  const updateProduct = async (id, productData) => {
+    try {
+      setLoading(true);
+      const updatedProduct = await productService.update(id, productData);
+      setProducts(products.map(product => 
+        product.id === id ? updatedProduct : product
+      ));
+      return updatedProduct;
+    } catch (err) {
+      setError('Gagal mengupdate produk');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteProduct = async (id) => {
+    try {
+      setLoading(true);
+      await productService.delete(id);
+      setProducts(products.filter(product => product.id !== id));
+    } catch (err) {
+      setError('Gagal menghapus produk');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getProductById = (id) => {
@@ -33,9 +74,12 @@ export const useProducts = () => {
 
   return {
     products,
+    loading,
+    error,
     addProduct,
     updateProduct,
     deleteProduct,
     getProductById,
+    refetch: fetchProducts,
   };
 };

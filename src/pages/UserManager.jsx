@@ -6,9 +6,11 @@ import UserTable from '../components/UserManager/UserTable';
 import UserModal from '../components/UserManager/UserModal';
 import SearchBar from '../components/Common/SearchBar';
 import Button from '../components/Common/Button';
+import Loading from '../components/Common/Loading';
+import ErrorMessage from '../components/Common/ErrorMessage';
 
 const UserManager = () => {
-  const { users, addUser, updateUser, deleteUser } = useUsers();
+  const { users, loading, error, addUser, updateUser, deleteUser, refetch } = useUsers();
   const { isOpen, modalType, editingItem, openModal, closeModal } = useModal();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -18,18 +20,26 @@ const UserManager = () => {
     user.role.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSubmit = (userData) => {
-    if (modalType === 'edit') {
-      updateUser(editingItem.id, userData);
-    } else {
-      addUser(userData);
+  const handleSubmit = async (userData) => {
+    try {
+      if (modalType === 'edit') {
+        await updateUser(editingItem.id, userData);
+      } else {
+        await addUser(userData);
+      }
+      closeModal();
+    } catch (err) {
+      alert('Gagal menyimpan data user');
     }
-    closeModal();
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus user ini?')) {
-      deleteUser(id);
+      try {
+        await deleteUser(id);
+      } catch (err) {
+        alert('Gagal menghapus user');
+      }
     }
   };
 
@@ -45,31 +55,42 @@ const UserManager = () => {
             variant="primary"
             icon={Plus}
             onClick={() => openModal('add')}
+            disabled={loading}
           >
             Tambah User
           </Button>
         </div>
 
-        <div className="mb-4">
-          <SearchBar
-            value={searchTerm}
-            onChange={setSearchTerm}
-            placeholder="Cari user berdasarkan nama, email, atau role..."
-          />
-        </div>
+        {error && <ErrorMessage message={error} onRetry={refetch} />}
 
-        <div className="mt-4">
-          <p className="text-sm text-gray-600 mb-4">
-            Total: <span className="font-semibold">{filteredUsers.length}</span> user
-          </p>
-        </div>
+        {!error && (
+          <>
+            <div className="mb-4">
+              <SearchBar
+                value={searchTerm}
+                onChange={setSearchTerm}
+                placeholder="Cari user berdasarkan nama, email, atau role..."
+              />
+            </div>
+
+            <div className="mt-4">
+              <p className="text-sm text-gray-600 mb-4">
+                Total: <span className="font-semibold">{filteredUsers.length}</span> user
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
-      <UserTable
-        users={filteredUsers}
-        onEdit={(user) => openModal('edit', user)}
-        onDelete={handleDelete}
-      />
+      {loading && <Loading message="Memuat data users..." />}
+
+      {!loading && !error && (
+        <UserTable
+          users={filteredUsers}
+          onEdit={(user) => openModal('edit', user)}
+          onDelete={handleDelete}
+        />
+      )}
 
       <UserModal
         isOpen={isOpen}
