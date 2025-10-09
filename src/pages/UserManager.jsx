@@ -44,18 +44,20 @@ const UserManager = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900">User Manager</h2>
-            <p className="text-gray-600 mt-1">Kelola data pengguna sistem</p>
+    <div className="space-y-4 sm:space-y-6">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center sm:justify-between mb-4 sm:mb-6">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">User Manager</h2>
+            <p className="text-xs sm:text-base text-gray-600 mt-1">Kelola data pengguna sistem</p>
           </div>
           <Button
             variant="primary"
             icon={Plus}
             onClick={() => openModal('add')}
             disabled={loading}
+            size="sm"
+            className="w-full sm:w-auto"
           >
             Tambah User
           </Button>
@@ -74,7 +76,7 @@ const UserManager = () => {
             </div>
 
             <div className="mt-4">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-xs sm:text-sm text-gray-600 mb-4">
                 Total: <span className="font-semibold">{filteredUsers.length}</span> user
               </p>
             </div>

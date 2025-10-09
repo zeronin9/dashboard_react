@@ -1,0 +1,99 @@
+/* Breakpoints:
+ * sm: 640px
+ * md: 768px
+ * lg: 1024px
+ * xl: 1280px
+ * 2xl: 1536px
+ */
+
+/* Landscape mode adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+  header {
+    padding: 0.5rem 0;
+  }
+
+  .pt-16 {
+    padding-top: 56px;
+  }
+
+  main {
+    padding: 0.5rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 320px) {
+  body {
+    font-size: 13px;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  h2 {
+    font-size: 1.125rem;
+  }
+}
+
+/* Tablet landscape */
+@media (min-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  header {
+    padding: 0.5rem 1rem;
+  }
+
+  main {
+    padding: 0.5rem;
+  }
+
+  .space-y-6 {
+    gap: 0.75rem;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  input {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  button.p-1 {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* Print styles */
+@media print {
+  header,
+  aside,
+  nav {
+    display: none;
+  }
+
+  main {
+    padding: 0;
+  }
+
+  .z-50,
+  .fixed {
+    position: static;
+  }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  /* You can add dark mode styles here */
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
