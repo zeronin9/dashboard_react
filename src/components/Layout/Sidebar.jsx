@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Users, Package, X, Menu } from 'lucide-react';
+import { Home, Users, Package } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
     { path: '/', icon: Home, label: 'Dashboard', exact: true },
@@ -25,35 +24,22 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* Hamburger Button - Visible on mobile & tablet */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-20 left-4 z-40 p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
-        title="Toggle menu"
-      >
-        {isOpen ? (
-          <X className="w-6 h-6" />
-        ) : (
-          <Menu className="w-6 h-6" />
-        )}
-      </button>
-
       {/* Overlay - Mobile only */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30 top-20"
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar - Desktop */}
-      <aside className="hidden md:block w-64 bg-white shadow-md min-h-screen sticky top-0">
+      <aside className="hidden md:block w-64 bg-white shadow-md min-h-full sticky top-0">
         <nav className="p-4">
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path, item.exact);
-              
+
               return (
                 <li key={item.path}>
                   <Link
@@ -76,7 +62,7 @@ const Sidebar = () => {
 
       {/* Sidebar - Mobile (Drawer) */}
       <aside
-        className={`md:hidden fixed left-0 top-20 w-64 h-screen bg-white shadow-lg z-30 transform transition-transform duration-300 ease-in-out ${
+        className={`md:hidden fixed left-0 top-0 w-64 h-screen bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -85,7 +71,7 @@ const Sidebar = () => {
             {menuItems.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.path, item.exact);
-              
+
               return (
                 <li key={item.path}>
                   <Link

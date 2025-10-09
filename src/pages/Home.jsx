@@ -67,7 +67,7 @@ const Home = () => {
               to={stat.link}
               className="bg-white rounded-lg shadow p-4 sm:p-6 hover:shadow-lg transition-shadow active:shadow-md"
             >
-              <div className="flex flex-col sm:flex-row lg:flex-col items-start justify-between gap-3 sm:gap-2 lg:gap-3">
+              <div className="flex items-center justify-between sm:items-start lg:flex-col gap-3 sm:gap-2 lg:gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="text-xs sm:text-sm text-gray-600 font-medium">{stat.title}</p>
                   <p className="text-2xl sm:text-3xl font-bold text-gray-900 mt-1 sm:mt-2">
