@@ -4,7 +4,7 @@ import { LayoutDashboard } from 'lucide-react';
 const Header = () => {
   return (
     <header className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <LayoutDashboard className="w-8 h-8 text-blue-600 mr-3" />
